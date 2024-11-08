@@ -10,13 +10,15 @@ import UIKit
 
 protocol NetworkServiceProtocol {
     
-    /// для получения списка котегорий товаров
-    func fetchCategories(completion: @escaping (Result<[String], Error>) -> Void)
+    /// для получения одного конкретного продуктa
+    func fetchSingleProduct(
+        productId: Int,
+        completion: @escaping (Result<ProductDTO, Error>) -> Void
+    )
     
     /// для получения списка продуктов данной категории
     func fetchProducts(
-        categoryName: String,
-        completion: @escaping (Result<CategoryProductsResultDTO, Error>) -> Void
+        completion: @escaping (Result<ProductsResultDTO, Error>) -> Void
     )
     
     /// для получения картинки по URL адресу
@@ -30,8 +32,12 @@ class NetworkService: NetworkServiceProtocol {
     
     private let baseURL = "https://dummyjson.com"
     
-    func fetchCategories(completion: @escaping (Result<[String], Error>) -> Void) {
-        let endpoint = "/products/category-list"
+    func fetchSingleProduct(
+        productId: Int,
+        completion: @escaping (Result<ProductDTO, any Error>) -> Void
+    ) {
+        let endpoint = "/product/\(productId)"
+        
         guard let url = URL(string: baseURL + endpoint) else {
             completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
             return
@@ -49,21 +55,22 @@ class NetworkService: NetworkServiceProtocol {
             }
             
             do {
-                let categories = try JSONDecoder().decode([String].self, from: data)
-                completion(.success(categories))
+                let product = try JSONDecoder()
+                    .decode(ProductDTO.self, from: data)
+                completion(.success(product))
             } catch {
                 completion(.failure(error))
             }
         }
         
         task.resume()
+        
     }
     
     func fetchProducts(
-        categoryName: String,
-        completion: @escaping (Result<CategoryProductsResultDTO, any Error>) -> Void
+        completion: @escaping (Result<ProductsResultDTO, any Error>) -> Void
     ) {
-        let endpoint = "/products/category/\(categoryName)"
+        let endpoint = "/products"
         
         guard let url = URL(string: baseURL + endpoint) else {
             completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
@@ -83,7 +90,7 @@ class NetworkService: NetworkServiceProtocol {
             
             do {
                 let productsInfo = try JSONDecoder()
-                    .decode(CategoryProductsResultDTO.self, from: data)
+                    .decode(ProductsResultDTO.self, from: data)
                 completion(.success(productsInfo))
             } catch {
                 completion(.failure(error))

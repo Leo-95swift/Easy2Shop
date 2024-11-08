@@ -1,16 +1,16 @@
 //
-//  ProductsModels.swift
+//  BasketModels.swift
 //  Easy2Shop
 //
-//  Created by Levon Shaxbazyan on 05.11.24.
+//  Created by Levon Shaxbazyan on 08.11.24.
 //
 
 import UIKit
 
-enum Products {
+enum Basket {
     // MARK: Use cases
     
-    enum DisplayProducts {
+    enum DisplayBasket {
         struct Request {
         }
         
@@ -38,3 +38,4 @@ enum Products {
         }
     }
 }
+

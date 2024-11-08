@@ -1,42 +1,31 @@
 //
-//  ProductsViewController.swift
+//  BasketViewController.swift
 //  Easy2Shop
 //
-//  Created by Levon Shaxbazyan on 05.11.24.
+//  Created by Levon Shaxbazyan on 08.11.24.
 //
 
 import UIKit
 
-protocol ProductsDisplayLogic: AnyObject {
-    func addProductsToVariable(viewModel: Products.DisplayProducts.ViewModel)
+protocol BasketDisplayLogic: AnyObject {
+    func addProductToVariable(viewModel: Basket.DisplayBasket.ViewModel)
 }
 
-final class ProductsViewController: UIViewController, ProductsDisplayLogic {
+final class BasketViewController: UIViewController, BasketDisplayLogic {
     
     // MARK: VIP variables
     
-     var interactor: ProductsBusinessLogic?
-     var router: (NSObjectProtocol & ProductsRoutingLogic & ProductsDataPassing)?
+     var interactor: BasketBusinessLogic?
+     var router: (NSObjectProtocol & BasketRoutingLogic & BasketDataPassing)?
     
     // MARK: - Visual Components
     
-    private let productsView = ProductsView()
+    private let basketView = BasketView()
     
     // MARK: - Private Properties
     
-    private var products: [Products.DisplayProducts.ViewModel.ProductInformationModel] = []
-        
-    // MARK: - Initializer
-    
-//    init() {
-//        super.init(nibName: nil, bundle: nil)
-//        setupComponents()
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//        setupComponents()
-//    }
+    private var selectedProducts: [Basket.DisplayBasket.ViewModel.ProductInformationModel] = []
+    private var productsSum = 0.0
     
     // MARK: View lifecycle
     
@@ -46,8 +35,8 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
         setupSubviews()
         configureSubviews()
         setupComponents()
-        setupProductsCollectionView()
-        requestProducts()
+        setupBasketCollectionView()
+        requestSelectedProducts()
         
     }
 
@@ -55,23 +44,23 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
     
     private func setupSubviews() {
         view.addSubviews([
-            productsView
+            basketView
         ])
         view.backgroundColor = .white
     }
     
     private func configureSubviews() {
-        configureProductsViewConstraints()
+        configureBasketViewConstraints()
     }
         
     func setupComponents() {
         
-        let interactor = ProductsInteractor()
+        let interactor = BasketInteractor()
         
         let viewController = self
-        let presenter = ProductsPresenter()
-        let worker = ProductsWorker()
-        let router = ProductsRouter()
+        let presenter = BasketPresenter()
+        let worker = BasketWorker()
+        let router = BasketRouter()
         
         viewController.interactor = interactor
         viewController.router = router
@@ -83,27 +72,30 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
         
     }
     
-    private func setupProductsCollectionView() {
-        productsView.productsCollectionView.delegate = self
-        productsView.productsCollectionView.dataSource = self
-        productsView.productsCollectionView.register(
+    private func setupBasketCollectionView() {
+        basketView.productsCollectionView.delegate = self
+        basketView.productsCollectionView.dataSource = self
+        basketView.productsCollectionView.register(
             ProductCollectionViewCell.self,
             forCellWithReuseIdentifier: ProductCollectionViewCell.identifier
         )
     }
         
-    private func requestProducts() {
-        let request = Products.DisplayProducts.Request()
+    private func requestSelectedProducts() {
+        let request = Basket.DisplayBasket.Request()
         interactor?.fetchProducts(request: request)
     }
     
-    func addProductsToVariable(
-        viewModel: Products.DisplayProducts.ViewModel
+    func addProductToVariable(
+        viewModel: Basket.DisplayBasket.ViewModel
     ) {
         let products = viewModel.products
-        self.products = products
+        self.selectedProducts = products
+        self.productsSum = selectedProducts.reduce(0.0) { $0 + $1.productPrice }
+        self.basketView.payButton.setTitle("Pay $\(productsSum)", for: .normal)
+        
         DispatchQueue.main.async {
-            self.productsView.productsCollectionView.reloadData()
+            self.basketView.productsCollectionView.reloadData()
         }
     }
       
@@ -111,9 +103,10 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
 
 // MARK: - UITableViewDataSource
 
-extension ProductsViewController: UICollectionViewDataSource {
+extension BasketViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        products.count
+        
+        selectedProducts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -123,7 +116,18 @@ extension ProductsViewController: UICollectionViewDataSource {
             for: indexPath
         ) as? ProductCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.configure(with: products[indexPath.row])
+        let product = selectedProducts[indexPath.row]
+        
+        let dataForCell = Products.DisplayProducts.ViewModel.ProductInformationModel(
+            id: product.id,
+            productImage: product.productImage,
+            productRating: product.productRating,
+            productName: product.productName,
+            productPrice: product.productPrice,
+            productDescription: product.productDescription
+        )
+        
+        cell.configure(with: dataForCell)
         
         return cell
     }
@@ -131,15 +135,13 @@ extension ProductsViewController: UICollectionViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension ProductsViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        interactor?.saveProductIdInFavorites(products[indexPath.row].id)
-    }
+extension BasketViewController: UICollectionViewDelegate {
+
 }
 
-// MARK: - ProductsViewController + UICollectionViewDelegateFlowLayout
+// MARK: - BasketViewController + UICollectionViewDelegateFlowLayout
 
-extension ProductsViewController: UICollectionViewDelegateFlowLayout {
+extension BasketViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -154,21 +156,22 @@ extension ProductsViewController: UICollectionViewDelegateFlowLayout {
 
 /// Расширение для установки размеров и расположений визуальных компонентов
 
-extension ProductsViewController {
-    private func configureProductsViewConstraints() {
+extension BasketViewController {
+    private func configureBasketViewConstraints() {
         NSLayoutConstraint.activate([
-            productsView.topAnchor.constraint(
+            basketView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
-            productsView.leadingAnchor.constraint(
+            basketView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor
             ),
-            productsView.trailingAnchor.constraint(
+            basketView.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor
             ),
-            productsView.bottomAnchor.constraint(
+            basketView.bottomAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor
             )
         ])
     }
 }
+

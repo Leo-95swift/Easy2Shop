@@ -1,39 +1,39 @@
 //
-//  ProductsPresenter.swift
+//  BasketPresenter.swift
 //  Easy2Shop
 //
-//  Created by Levon Shaxbazyan on 05.11.24.
+//  Created by Levon Shaxbazyan on 08.11.24.
 //
 
 import UIKit
 
-protocol ProductsPresentationLogic {
+protocol BasketPresentationLogic {
    
     /// для получения названий категорий
     func presentFetchedProducts(
-        response: [Products.DisplayProducts.Response.ProductInformationModel]
+        response: [Basket.DisplayBasket.Response.ProductInformationModel]
     )
 }
 
-final class ProductsPresenter {
+final class BasketPresenter {
     
     // MARK: Public properties
     
-    weak var viewController: ProductsDisplayLogic?
+    weak var viewController: BasketDisplayLogic?
 }
 
-extension ProductsPresenter: ProductsPresentationLogic {
+extension BasketPresenter: BasketPresentationLogic {
     
     func presentFetchedProducts(
-        response: [Products.DisplayProducts.Response.ProductInformationModel]
+        response: [Basket.DisplayBasket.Response.ProductInformationModel]
     ) {
         
         let productInfoArray = response
         
-        var productInformation: [Products.DisplayProducts.ViewModel.ProductInformationModel] = []
+        var productInformation: [Basket.DisplayBasket.ViewModel.ProductInformationModel] = []
         
         for productInfo in productInfoArray {
-            let productModel = Products.DisplayProducts.ViewModel.ProductInformationModel(
+            let productModel = Basket.DisplayBasket.ViewModel.ProductInformationModel(
                 id: productInfo.id,
                 productImage: productInfo.productImage,
                 productRating: productInfo.productRating,
@@ -45,8 +45,8 @@ extension ProductsPresenter: ProductsPresentationLogic {
             productInformation.append(productModel)
         }
         
-        let viewModel = Products.DisplayProducts.ViewModel(products: productInformation)
-        viewController?.addProductsToVariable(viewModel: viewModel)
+        let viewModel = Basket.DisplayBasket.ViewModel(products: productInformation)
+        viewController?.addProductToVariable(viewModel: viewModel)
     }
 }
 
