@@ -6,7 +6,11 @@
 //
 
 protocol ProductCategoriesBusinessLogic {
-    func fetchProductCategories(request: ProductCategories.DisplayProductCategories.Request)
+    
+    func fetchProductCategories(
+        request: ProductCategories.DisplayProductCategories.Request
+    )
+    
     func saveSelectedItem(
         category: String
     )
@@ -16,7 +20,7 @@ protocol ProductCategoriesDataStore {
     var chosenCategory: String? { get set }
 }
 
-final class ProductCategoriesInteractor: ProductCategoriesBusinessLogic {
+final class ProductCategoriesInteractor: ProductCategoriesBusinessLogic, ProductCategoriesDataStore {
     
     // MARK: Constants
     
@@ -37,8 +41,8 @@ final class ProductCategoriesInteractor: ProductCategoriesBusinessLogic {
             switch result {
             case .success(let categories):
                 self.categories = categories
-                let response = ProductCategories.DisplayProductCategories.Response(
-                    categories: categories)
+                let response = ProductCategories.DisplayProductCategories
+                    .Response(categories: categories)
                 self.presenter?.presentFetchedProductCategories(response: response)
             case .failure(let error):
                 print("Ошибка: \(error.localizedDescription)")
@@ -49,9 +53,6 @@ final class ProductCategoriesInteractor: ProductCategoriesBusinessLogic {
     
     func saveSelectedItem(category: String) {
         chosenCategory = category
+        print("Chosen category set to: \(chosenCategory ?? "nil")")
     }
-}
-
-extension ProductCategoriesInteractor: ProductCategoriesDataStore {
-    
 }
