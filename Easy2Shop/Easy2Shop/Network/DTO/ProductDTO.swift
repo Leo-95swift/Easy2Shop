@@ -12,6 +12,7 @@ struct ProductDTO: Codable {
     
     /// Уникальный идентификатор продукта
     let id: Int
+    
     /// Название продукта
     let title: String
     

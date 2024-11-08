@@ -9,9 +9,17 @@ import UIKit
 
 protocol ProductsBusinessLogic {
     
+    /// для получения списка продуктов
     func fetchProducts(
         request: Products.DisplayProducts.Request
     )
+    
+    /// для добавления продукта в корзину
+    func saveProductIdInFavorites(_ productId: Int)
+    
+    /// для удаления продукта из корзины
+    func removeProdductIdFromFavorites(_ productId: Int)
+
 }
 
 protocol ProductsDataStore {
@@ -35,12 +43,7 @@ final class ProductsInteractor: ProductsBusinessLogic, ProductsDataStore {
     
     func fetchProducts(request: Products.DisplayProducts.Request) {
         
-        guard let categoryName = categoryName, !categoryName.isEmpty
-        else {
-            return
-        }
-        
-        networkService.fetchProducts(categoryName: categoryName) { result in
+        networkService.fetchProducts() { result in
             switch result {
             case .success(let productInfoResult):
                 
@@ -59,6 +62,7 @@ final class ProductsInteractor: ProductsBusinessLogic, ProductsDataStore {
                             case .success(let fetchedImage):
                                 
                                 let newItem = Products.DisplayProducts.Response.ProductInformationModel(
+                                    id: productInfo.id,
                                     productImage: fetchedImage,
                                     productRating: productInfo.rating,
                                     productName: productInfo.title,
@@ -82,6 +86,15 @@ final class ProductsInteractor: ProductsBusinessLogic, ProductsDataStore {
             }
         }
 
+    }
+    
+    func saveProductIdInFavorites(_ productId: Int) {
+        guard let worker = worker else { return }
+        worker.saveProductIdInFavorites(productId)
+    }
+    
+    func removeProdductIdFromFavorites(_ productId: Int) {
+        worker?.removeProdductIdFromFavorites(productId)
     }
     
 }

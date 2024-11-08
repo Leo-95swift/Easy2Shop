@@ -8,7 +8,7 @@
 import Foundation
 
 /// Структура для представления результата с продуктами в категории
-struct CategoryProductsResultDTO: Codable {
+struct ProductsResultDTO: Codable {
     
     /// Список продуктов в выбранной категории
     let products: [ProductDTO]
