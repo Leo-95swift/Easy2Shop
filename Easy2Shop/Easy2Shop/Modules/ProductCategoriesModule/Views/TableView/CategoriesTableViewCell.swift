@@ -4,6 +4,7 @@
 //
 //  Created by Levon Shaxbazyan on 04.11.24.
 //
+
 import UIKit
 
 final class CategoriesTableViewCell: UITableViewCell {

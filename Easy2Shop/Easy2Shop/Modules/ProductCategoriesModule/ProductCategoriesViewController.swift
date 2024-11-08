@@ -25,6 +25,17 @@ final class ProductCategoriesViewController: UIViewController, ProductCategories
     // MARK: - Private Properties
     
     private var categories: [String] = []
+        
+    // MARK: - Initializer
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        setupComponents()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupComponents()
+    }
     
     // MARK: View lifecycle
     
@@ -33,7 +44,6 @@ final class ProductCategoriesViewController: UIViewController, ProductCategories
         
         setupSubviews()
         configureSubviews()
-        setupComponents()
         setupCategoriesTableView()
         requestProductCategories()
     }
@@ -119,8 +129,8 @@ extension ProductCategoriesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // interactor?.saveSelectedItem(character: characters[indexPath.row])
-        // router?.routeToDetailedViewController()
+        interactor?.saveSelectedItem(category: categories[indexPath.row])
+        router?.routeToProductsViewController()
     }
 }
 
