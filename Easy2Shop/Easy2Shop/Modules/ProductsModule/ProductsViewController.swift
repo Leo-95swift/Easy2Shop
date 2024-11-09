@@ -48,6 +48,7 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
         setupComponents()
         setupProductsCollectionView()
         requestProducts()
+        setupNavigationTitle()
         
     }
 
@@ -105,6 +106,11 @@ final class ProductsViewController: UIViewController, ProductsDisplayLogic {
         DispatchQueue.main.async {
             self.productsView.productsCollectionView.reloadData()
         }
+    }
+    
+    private func setupNavigationTitle() {
+        title = "All products"
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
       
 }

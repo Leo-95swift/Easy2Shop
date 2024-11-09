@@ -9,7 +9,7 @@ import UIKit
 
 protocol BasketBusinessLogic {
     
-    func fetchProducts(
+    func fetchSelectedProducts(
         request: Basket.DisplayBasket.Request
     )
 }
@@ -31,7 +31,7 @@ final class BasketInteractor: BasketBusinessLogic, BasketDataStore {
     
     // MARK: Public methods
     
-    func fetchProducts(request: Basket.DisplayBasket.Request) {
+    func fetchSelectedProducts(request: Basket.DisplayBasket.Request) {
         guard let productIds = worker?.getFavoriteProductIds(),
               !productIds.isEmpty
         else { return }

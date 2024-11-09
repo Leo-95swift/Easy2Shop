@@ -24,20 +24,11 @@ final class BasketView: UIView {
         }
         
         enum Texts {
-            static let title = "My Basket"
             static let payButton = "Pay $100"
         }
     }
     
     // MARK: - Visual Components
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = Constants.Texts.title
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
     
     let productsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -76,7 +67,6 @@ final class BasketView: UIView {
     
     private func setupSubviews() {
         addSubviews([
-            titleLabel,
             productsCollectionView,
             payButton
         ])
@@ -84,7 +74,6 @@ final class BasketView: UIView {
     }
     
     private func configureConstraints() {
-        configureTitleLabelConstraints()
         configureCollectionViewConstraints()
         configurePayButtonConstraints()
     }
@@ -93,30 +82,11 @@ final class BasketView: UIView {
 // MARK: - Constraints Configuration
 
 extension BasketView {
-    private func configureTitleLabelConstraints() {
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: Constants.Insets.top
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: Constants.Insets.leading
-            ),
-            titleLabel.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: Constants.Insets.trailing
-            ),
-            titleLabel.heightAnchor.constraint(
-                equalToConstant: Constants.Insets.titleHeight
-            )
-        ])
-    }
     
     private func configureCollectionViewConstraints() {
         NSLayoutConstraint.activate([
             productsCollectionView.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
+                equalTo: safeAreaLayoutGuide.topAnchor,
                 constant: Constants.Insets.top
             ),
             productsCollectionView.leadingAnchor.constraint(

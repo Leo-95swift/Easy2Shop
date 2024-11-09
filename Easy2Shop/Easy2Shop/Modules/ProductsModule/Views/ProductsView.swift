@@ -26,13 +26,6 @@ final class ProductsView: UIView {
     
     // MARK: - Visual Components
     
-    let categoryNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
-    
     let productsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(
@@ -48,12 +41,14 @@ final class ProductsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupSubviews()
         configureConstraints()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
         setupSubviews()
         configureConstraints()
     }
@@ -62,45 +57,25 @@ final class ProductsView: UIView {
     
     private func setupSubviews() {
         addSubviews([
-            categoryNameLabel,
             productsCollectionView
         ])
         backgroundColor = .white
     }
     
     private func configureConstraints() {
-        configureCategoryNameLabelConstraints()
         configureCollectionViewConstraints()
     }
+
 }
 
 // MARK: - Constraints Configuration
 
 extension ProductsView {
-    private func configureCategoryNameLabelConstraints() {
-        NSLayoutConstraint.activate([
-            categoryNameLabel.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: Constants.Insets.top
-            ),
-            categoryNameLabel.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: Constants.Insets.leading
-            ),
-            categoryNameLabel.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: Constants.Insets.trailing
-            ),
-            categoryNameLabel.heightAnchor.constraint(
-                equalToConstant: Constants.Insets.titleHeight
-            )
-        ])
-    }
     
     private func configureCollectionViewConstraints() {
         NSLayoutConstraint.activate([
             productsCollectionView.topAnchor.constraint(
-                equalTo: categoryNameLabel.bottomAnchor,
+                equalTo: safeAreaLayoutGuide.topAnchor,
                 constant: Constants.Insets.top
             ),
             productsCollectionView.leadingAnchor.constraint(
