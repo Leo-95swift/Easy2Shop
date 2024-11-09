@@ -88,6 +88,8 @@ final class ProductsInteractor: ProductsBusinessLogic, ProductsDataStore {
 
     }
     
+    
+    
     func saveProductIdInFavorites(_ productId: Int) {
         guard let worker = worker else { return }
         worker.saveProductIdInFavorites(productId)

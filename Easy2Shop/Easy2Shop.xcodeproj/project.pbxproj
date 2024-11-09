@@ -35,6 +35,7 @@
 		01ED0F0D2CDE27C60045F640 /* BasketRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ED0F0C2CDE27C60045F640 /* BasketRouter.swift */; };
 		01ED0F0F2CDE27D80045F640 /* BasketView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ED0F0E2CDE27D80045F640 /* BasketView.swift */; };
 		01ED0F112CDE65650045F640 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01ED0F102CDE65650045F640 /* Colors.xcassets */; };
+		01ED0F152CDE95D00045F640 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ED0F142CDE95D00045F640 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		01ED0F0C2CDE27C60045F640 /* BasketRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketRouter.swift; sourceTree = "<group>"; };
 		01ED0F0E2CDE27D80045F640 /* BasketView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketView.swift; sourceTree = "<group>"; };
 		01ED0F102CDE65650045F640 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		01ED0F142CDE95D00045F640 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 		01ED0ECA2CD8BEDB0045F640 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				01ED0F122CDE950B0045F640 /* TabBarModule */,
 				01ED0EE92CDA96C70045F640 /* ProductsModule */,
 				01ED0EFE2CDE27690045F640 /* BasketModule */,
 			);
@@ -278,6 +281,14 @@
 				01ED0F0E2CDE27D80045F640 /* BasketView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		01ED0F122CDE950B0045F640 /* TabBarModule */ = {
+			isa = PBXGroup;
+			children = (
+				01ED0F142CDE95D00045F640 /* TabBarController.swift */,
+			);
+			path = TabBarModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -416,6 +427,7 @@
 				01ED0EEC2CDA96E70045F640 /* ProductsViewController.swift in Sources */,
 				01ED0F072CDE27AB0045F640 /* BasketPresenter.swift in Sources */,
 				01ED0EDF2CD8CF1E0045F640 /* PrepareForAutoLayout.swift in Sources */,
+				01ED0F152CDE95D00045F640 /* TabBarController.swift in Sources */,
 				01ED0EF42CDA97240045F640 /* ProductsWorker.swift in Sources */,
 				01ED0EF02CDA97100045F640 /* ProductsPresenter.swift in Sources */,
 				01ED0EF22CDA971B0045F640 /* ProductsModels.swift in Sources */,

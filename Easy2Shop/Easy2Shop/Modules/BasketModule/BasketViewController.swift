@@ -11,7 +11,7 @@ protocol BasketDisplayLogic: AnyObject {
     func addProductToVariable(viewModel: Basket.DisplayBasket.ViewModel)
 }
 
-final class BasketViewController: UIViewController, BasketDisplayLogic {
+final class BasketViewController: UIViewController {
     
     // MARK: VIP variables
     
@@ -37,7 +37,15 @@ final class BasketViewController: UIViewController, BasketDisplayLogic {
         setupComponents()
         setupBasketCollectionView()
         requestSelectedProducts()
+        setupNavigationTitle()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        if isViewLoaded {
+            requestSelectedProducts()
+        }
     }
 
     // MARK: - Private Methods
@@ -53,7 +61,7 @@ final class BasketViewController: UIViewController, BasketDisplayLogic {
         configureBasketViewConstraints()
     }
         
-    func setupComponents() {
+    private func setupComponents() {
         
         let interactor = BasketInteractor()
         
@@ -69,7 +77,6 @@ final class BasketViewController: UIViewController, BasketDisplayLogic {
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
-        
     }
     
     private func setupBasketCollectionView() {
@@ -83,8 +90,19 @@ final class BasketViewController: UIViewController, BasketDisplayLogic {
         
     private func requestSelectedProducts() {
         let request = Basket.DisplayBasket.Request()
-        interactor?.fetchProducts(request: request)
+        interactor?.fetchSelectedProducts(request: request)
     }
+    
+    private func setupNavigationTitle() {
+        title = "My basket"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+      
+}
+
+// MARK: - BasketDisplayLogic
+
+extension BasketViewController: BasketDisplayLogic {
     
     func addProductToVariable(
         viewModel: Basket.DisplayBasket.ViewModel
@@ -98,7 +116,6 @@ final class BasketViewController: UIViewController, BasketDisplayLogic {
             self.basketView.productsCollectionView.reloadData()
         }
     }
-      
 }
 
 // MARK: - UITableViewDataSource
